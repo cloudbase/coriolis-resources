@@ -27,5 +27,9 @@ openstack endpoint create --region RegionOne migration admin $ENDPOINT_URL
 openstack user create --password Passw0rd coriolis
 openstack role add --project service --user coriolis admin
 
+test -d ~/.ssh || mkdir ~/.ssh
+nova keypair-add key1 > ~/.ssh/id_rsa_key1
+chmod 600 ~/.ssh/id_rsa_key1
+
 #barbican secret store --os-identity-api-version=2 --payload '{"host": "10.89.13.104", "port": 443, "username": "user@vsphere.local", "password": "Passw0rd", "allow_untrusted": true}'
 
