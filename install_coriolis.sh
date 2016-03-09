@@ -281,6 +281,6 @@ wget https://dl.dropboxusercontent.com/u/9060190/VMware-vix-disklib-6.0.0-249872
 tar zxvf VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
 cp vmware-vix-disklib-distrib/bin64/* /usr/bin
 mkdir -p /usr/lib/vmware
-cp vmware-vix-disklib-distrib/lib64/* /usr/lib/vmware
+cp -d vmware-vix-disklib-distrib/lib64/* /usr/lib/vmware
 rm -rf vmware-vix-disklib-distrib/
 rm VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
