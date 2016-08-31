@@ -124,6 +124,8 @@ openstack endpoint create --region RegionOne identity public http://localhost:50
 openstack endpoint create --region RegionOne identity internal http://localhost:5000/v2.0
 openstack endpoint create --region RegionOne identity admin http://localhost:35357/v2.0
 
+openstack domain create default
+
 openstack project create --domain default --description "Admin Project" admin
 openstack user create --domain default --password $ADMIN_PASSWORD admin
 openstack role create admin
@@ -138,6 +140,8 @@ openstack role add --project demo --user demo user
 
 
 # Test
+unset OS_TOKEN
+
 #TODO add password
 openstack --os-auth-url http://localhost:35357/v3 \
   --os-project-domain-id default --os-user-domain-id default \
@@ -150,8 +154,8 @@ openstack --os-auth-url http://localhost:5000/v3 \
   token issue
 
 cat << EOF > ~/keystone_admin_rc
-export OS_PROJECT_DOMAIN_ID=default
-export OS_USER_DOMAIN_ID=default
+export OS_PROJECT_DOMAIN_NAME=default
+export OS_USER_DOMAIN_NAME=default
 export OS_PROJECT_NAME=admin
 export OS_TENANT_NAME=admin
 export OS_USERNAME=admin
