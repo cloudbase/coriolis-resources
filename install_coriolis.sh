@@ -183,7 +183,7 @@ openstack endpoint create --region RegionOne migration public $ENDPOINT_URL
 openstack endpoint create --region RegionOne migration internal $ENDPOINT_URL
 openstack endpoint create --region RegionOne migration admin $ENDPOINT_URL
 
-openstack user create --password $CORIOLIS_PASSWORD coriolis
+openstack user create --domain default --password $CORIOLIS_PASSWORD coriolis
 openstack role add --project service --user coriolis admin
 
 useradd -r -s /bin/false coriolis
@@ -234,7 +234,7 @@ BARBICAN_ENDPOINT_URL="http://$HOST_IP:9311"
 openstack endpoint create --region RegionOne key-manager public $BARBICAN_ENDPOINT_URL
 openstack endpoint create --region RegionOne key-manager internal $BARBICAN_ENDPOINT_URL
 
-openstack user create --password $BARBICAN_PASSWORD barbican
+openstack user create --domain default --password $BARBICAN_PASSWORD barbican
 openstack role add --project service --user barbican admin
 
 mysql -u root -p$MYSQL_ROOT_PASSWORD << EOF
