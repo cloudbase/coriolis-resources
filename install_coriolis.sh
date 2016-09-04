@@ -220,11 +220,20 @@ EOF
 # TODO: fix
 su -s /bin/sh -c "python3 coriolis/cmd/db_sync.py"
 
-cp coriolis/debian/etc/init/* /etc/init
-
-service coriolis-api restart
-service coriolis-conductor restart
-service coriolis-worker restart
+if [ $(pidof systemd) ]; then
+    cp coriolis/systemd/* /lib/systemd/system/
+    systemctl enable coriolis-api.service
+    systemctl enable coriolis-conductor.service
+    systemctl enable coriolis-worker.service
+    systemctl start coriolis-api.service
+    systemctl start coriolis-conductor.service
+    systemctl start coriolis-worker.service
+else
+    cp coriolis/debian/etc/init/* /etc/init
+    service coriolis-api restart
+    service coriolis-conductor restart
+    service coriolis-worker restart
+fi
 
 # Barbican:
 apt-get install barbican-api barbican-worker -y
