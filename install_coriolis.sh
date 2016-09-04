@@ -168,7 +168,7 @@ source ~/keystone_admin_rc
 
 # Coriolis
 
-apt-get install python3-pip libssl-dev libmysqlclient-dev -y
+apt-get install python3-pip python3-eventlet libssl-dev libmysqlclient-dev -y
 
 git clone https://github.com/cloudbase/pywinrm.git -b requests
 pip3 install pywinrm/.
