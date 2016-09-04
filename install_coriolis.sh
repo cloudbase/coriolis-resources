@@ -258,13 +258,14 @@ crudini --set /etc/barbican/barbican.conf DEFAULT host_href http://$HOST_IP:9311
 
 crudini --set /etc/barbican/barbican-api-paste.ini pipeline:barbican_api pipeline barbican-api-keystone
 
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_host localhost
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_port 35357
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_protocol http
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken identity_uri http://localhost:35357
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken admin_user barbican
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken admin_password $BARBICAN_PASSWORD
-crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken admin_tenant_name service
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_uri http://localhost:5000/v3
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_url http://localhost:35357/v3
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken auth_plugin password
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken username barbican
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken password $BARBICAN_PASSWORD
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken user_domain_name default
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken project_name service
+crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken project_domain_name default
 crudini --set /etc/barbican/barbican-api-paste.ini filter:keystone_authtoken signing_dir /var/cache/barbican
 
 crudini --set /etc/barbican/barbican.conf secrets broker rabbit://barbican:$RABBIT_PASSWORD@localhost
@@ -278,8 +279,9 @@ mkdir -p /var/cache/barbican
 chown barbican.barbican /var/cache/barbican
 chmod 700 /var/cache/barbican
 
-service barbican-api restart
+#service barbican-api restart
 service barbican-worker restart
+service apache2 restart
 
 # VMWare
 wget https://dl.dropboxusercontent.com/u/9060190/VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
