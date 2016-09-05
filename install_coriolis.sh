@@ -16,6 +16,11 @@ export CORIOLIS_PASSWORD=Passw0rd
 add-apt-repository cloud-archive:liberty -y
 apt-get update -y
 
+sudo apt-get install ntp ntpdate -y
+service ntp stop
+ntpdate pool.ntp.org
+service ntp start
+
 apt-get install rabbitmq-server -y
 
 rabbitmqctl add_user coriolis $RABBIT_PASSWORD
