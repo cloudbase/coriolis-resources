@@ -295,11 +295,19 @@ chmod 700 /var/cache/barbican
 service barbican-worker restart
 service apache2 restart
 
-# VMWare
-wget https://dl.dropboxusercontent.com/u/9060190/VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
-tar zxvf VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
-cp vmware-vix-disklib-distrib/bin64/* /usr/bin
-mkdir -p /usr/lib/vmware
-cp -d vmware-vix-disklib-distrib/lib64/* /usr/lib/vmware
-rm -rf vmware-vix-disklib-distrib/
-rm VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
+# Download latest VMware vix disklib 
+VMWARE_VIX_TGZ=VMware-vix-disklib-6.0.0-2498720.x86_64.tar.gz
+#wget https://foo/bar/$VMWARE_VIX_TGZ
+tar zxvf $VMWARE_VIX_TGZ
+VIX_DIR=vmware-vix-disklib-distrib
+
+cp $VIX_DIR/bin64/* /usr/bin
+VMWARE_VIX_LIB_DIR=/usr/lib/vmware-vix-disklib/lib64
+mkdir -p $VMWARE_VIX_LIB_DIR
+cp -d $VIX_DIR/lib64/* $VMWARE_VIX_LIB_DIR
+# Ensure the $VMWARE_VIX_LIB_DIR libs are loaded at the end to avoid conflicts
+echo $VMWARE_VIX_LIB_DIR > /etc/ld.so.conf.d/zzz_vmware-vix-disklib.conf
+ldconfig
+
+rm -rf $VIX_DIR
+rm $VMWARE_VIX_TGZ
