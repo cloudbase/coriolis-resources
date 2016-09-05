@@ -204,8 +204,11 @@ crudini --set /etc/coriolis/coriolis.conf DEFAULT log_dir /var/log/coriolis
 crudini --set /etc/coriolis/coriolis.conf DEFAULT verbose true
 crudini --set /etc/coriolis/coriolis.conf DEFAULT messaging_transport_url rabbit://coriolis:$RABBIT_PASSWORD@127.0.0.1:5672/
 
-crudini --set /etc/coriolis/coriolis.conf keystone_authtoken auth_url http://localhost:35357
+crudini --set /etc/coriolis/coriolis.conf keystone_authtoken auth_url http://localhost:35357/v3
 crudini --set /etc/coriolis/coriolis.conf keystone_authtoken password $CORIOLIS_PASSWORD
+
+crudini --set /etc/coriolis/coriolis.conf trustee auth_url http://localhost:35357/v3
+crudini --set /etc/coriolis/coriolis.conf trustee password $CORIOLIS_PASSWORD
 
 crudini --set /etc/coriolis/coriolis.conf database connection mysql+pymysql://coriolis:$CORIOLIS_DB_PASSWORD@localhost/coriolis
 
