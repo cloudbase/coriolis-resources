@@ -1,0 +1,11 @@
+CONFIG_PATH=/var/lib/coriolis/coriolis.ini
+PUBLIC_IFACE=`crudini --get $CONFIG_PATH dhcp interface`
+
+if [ -z "$PUBLIC_IFACE" ] || [ "$interface" = "$PUBLIC_IFACE" ]; then
+    case "$reason" in
+        BOUND|RENEW|REBIND|REBOOT|TIMEOUT)
+        /var/lib/coriolis/coriolis_change_ip.sh "$new_ip_address"
+        ;;
+    esac
+fi
+
