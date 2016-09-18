@@ -27,6 +27,9 @@ rabbitmqctl add_user coriolis $RABBIT_PASSWORD
 rabbitmqctl set_permissions -p / coriolis '.*' '.*' '.*'
 
 apt-get install qemu-utils -y
+
+debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_ROOT_PASSWORD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PASSWORD"
 apt-get install mysql-server -y
 
 apt-get install keystone apache2 libapache2-mod-wsgi memcached python-memcache -y
