@@ -1,7 +1,13 @@
 #!/bin/bash
 set -e
 
-HOST_IP=10.14.0.186
+get_interface_ipv4 () {
+    local IFACE=$1
+    ip addr show $IFACE | sed -n 's/^\s*inet \([0-9.]*\)\/[0-9]*\s* brd [0-9.]*.*$/\1/p'
+}
+
+PUBLIC_IFACE=eth0
+HOST_IP=`get_interface_ipv4 $PUBLIC_IFACE`
 
 export RABBIT_PASSWORD=Passw0rd
 export ADMIN_PASSWORD=Passw0rd
