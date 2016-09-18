@@ -231,6 +231,9 @@ EOF
 
 su -s /bin/sh -c "python3 coriolis/coriolis/cmd/db_sync.py"
 
+mkdir -p /var/lock/coriolis /var/log/coriolis /var/lib/coriolis
+chown coriolis:coriolis /var/lock/coriolis /var/log/coriolis /var/lib/coriolis
+
 if [ $(pidof systemd) ]; then
     cp coriolis/systemd/* /lib/systemd/system/
     systemctl enable coriolis-api.service
