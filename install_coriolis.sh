@@ -229,8 +229,7 @@ GRANT ALL PRIVILEGES ON coriolis.* TO 'coriolis'@'%' \
   IDENTIFIED BY '$CORIOLIS_DB_PASSWORD';
 EOF
 
-# TODO: fix
-su -s /bin/sh -c "python3 coriolis/cmd/db_sync.py"
+su -s /bin/sh -c "python3 coriolis/coriolis/cmd/db_sync.py"
 
 if [ $(pidof systemd) ]; then
     cp coriolis/systemd/* /lib/systemd/system/
