@@ -150,16 +150,17 @@ openstack role add --project demo --user demo user
 # Test
 unset OS_TOKEN
 
-#TODO add password
 openstack --os-auth-url http://localhost:35357/v3 \
-  --os-project-domain-id default --os-user-domain-id default \
-  --os-project-name admin --os-username admin --os-auth-type password \
+  --os-project-domain-name default --os-user-domain-name default \
+  --os-project-name admin --os-username admin --os-password $ADMIN_PASSWORD \
+  --os-auth-type password \
   token issue
 
-openstack --os-auth-url http://localhost:5000/v3 \
-  --os-project-domain-id default --os-user-domain-id default \
-  --os-project-name demo --os-username demo --os-auth-type password \
-  token issue
+openstack --os-auth-url http://localhost:35357/v3 \
+  --os-project-domain-name default --os-user-domain-name default \
+  --os-project-name demo --os-username demo --os-password $ADMIN_PASSWORD \
+  --os-auth-type password \
+token issue
 
 cat << EOF > ~/keystone_admin_rc
 export OS_PROJECT_DOMAIN_NAME=default
