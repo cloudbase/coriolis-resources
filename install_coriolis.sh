@@ -246,6 +246,10 @@ else
     service coriolis-worker restart
 fi
 
+# Coriolis client 
+git clone https://github.com/cloudbase/python-coriolisclient
+pip install python-coriolisclient/
+
 # Barbican:
 apt-get install barbican-api barbican-worker -y
 
