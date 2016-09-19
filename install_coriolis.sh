@@ -329,6 +329,8 @@ cp -d $VIX_DIR/lib64/* $VMWARE_VIX_LIB_DIR
 # Ensure the $VMWARE_VIX_LIB_DIR libs are loaded at the end to avoid conflicts
 echo $VMWARE_VIX_LIB_DIR > /etc/ld.so.conf.d/zzz_vmware-vix-disklib.conf
 ldconfig
+# This is needed for vmware-vdiskmanager
+ln -s $VMWARE_VIX_LIB_DIR /usr/lib/vmware
 
 rm -rf $VIX_DIR
 rm $VMWARE_VIX_TGZ
