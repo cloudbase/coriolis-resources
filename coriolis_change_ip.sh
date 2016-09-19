@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+get_interface_ipv4 () {
+    local IFACE=$1
+    ip addr show $IFACE | sed -n 's/^\s*inet \([0-9.]*\)\/[0-9]*\s* brd [0-9.]*.*$/\1/p'
+}
+
 source /var/lib/coriolis/keystone_admin_rc
 
 CONFIG_PATH=/var/lib/coriolis/coriolis.ini
@@ -13,14 +18,25 @@ if [ -z "$OLD_IP" ]; then
 fi
 
 if [ -z "$NEW_IP" ]; then
-    echo "Missing NEW_IP argument"
-    exit 1
+    PUBLIC_IFACE=`crudini --get $CONFIG_PATH dhcp interface`
+    if [ -z "$PUBLIC_IFACE" ]; then
+        echo "Interface not set"
+        exit 1
+    fi
+
+    NEW_IP=`get_interface_ipv4 $PUBLIC_IFACE`
+    if [ -z "$NEW_IP" ]; then
+        echo "Interface ip not set"
+        exit 1
+    fi
 fi
 
 if [ "$NEW_IP" == "$OLD_IP" ]; then
    echo "NEW_IP equals OLD_IP, no action needed"
    exit 0
 fi
+
+crudini --set /etc/barbican/barbican.conf DEFAULT host_href http://$NEW_IP:9311
 
 L=`openstack endpoint list | grep $OLD_IP | awk '{print $2 " " $14}'`
 if [ -z "$L" ]; then
@@ -36,8 +52,6 @@ for i in $L; do
     echo openstack endpoint set $ID --url "$NEW_URL"
     openstack endpoint set $ID --url "$NEW_URL"
 done
-
-crudini --set /etc/barbican/barbican.conf DEFAULT host_href http://$NEW_IP:9311
 
 service barbican-worker restart
 service apache2 restart
