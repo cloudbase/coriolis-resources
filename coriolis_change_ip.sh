@@ -23,6 +23,11 @@ if [ "$NEW_IP" == "$OLD_IP" ]; then
 fi
 
 L=`openstack endpoint list | grep $OLD_IP | awk '{print $2 " " $14}'`
+if [ -z "$L" ]; then
+    echo "Could not get endpoint list"
+    exit 1
+fi
+
 IFS=$'\n'
 for i in $L; do
     unset IFS
