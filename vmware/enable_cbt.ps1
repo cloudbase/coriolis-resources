@@ -6,6 +6,8 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
+Import-Module VMware.VimAutomation.Core
+
 Connect-VIServer -Server $server -Credential $Credential
 
 $vm = Get-vm $VMName | Get-View
