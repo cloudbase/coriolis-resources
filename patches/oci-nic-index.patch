@@ -1,0 +1,21 @@
+diff --git a/coriolis_provider_oci/imp.py b/coriolis_provider_oci/imp.py
+index afba8b1..f647e05 100644
+--- a/coriolis_provider_oci/imp.py
++++ b/coriolis_provider_oci/imp.py
+@@ -1066,7 +1066,7 @@ class ImportProvider(common.MigrationMixin,
+ 
+     def _attach_secondary_nics(self, cli, conf, instance_id, nics):
+         changes = False
+-        for idx, nic in enumerate(nics):
++        for nic in nics:
+             subnet_id, nsgs = self._get_subnet_and_nsg_for_nic(nic, conf)
+             if subnet_id is None:
+                 LOG.warning(
+@@ -1088,7 +1088,6 @@ class ImportProvider(common.MigrationMixin,
+             attach_vnic_details.create_vnic_details = create_details
+             attach_vnic_details.display_name = nic_name
+             attach_vnic_details.instance_id = instance_id
+-            attach_vnic_details.nic_index = idx
+ 
+             ret = utils.retry_on_error()(
+                 cli.compute.attach_vnic)(attach_vnic_details)
