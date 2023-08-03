@@ -46,12 +46,15 @@ def get_vm_addresses(nics):
     addresses = []
     for nic in nics:
         rps = nic.reported_devices
+        LOG.debug("RP objects: %s", rps)
         if rps:
             for rp in rps:
                 ips = rp.ips
+                LOG.debug("NIC IP objects: %s", ips)
                 if ips:
                     for ip in ips:
                         addr = ip.address
+                        LOG.debug("NIC IP address: %s", addr)
                         if addr:
                             addresses.append(addr)
     return addresses
@@ -75,6 +78,23 @@ def get_vm_main_address(nics):
         if ip_address:
             break
     return ip_address
+
+
+def get_ips_from_vm_rps(conn, vm):
+    addresses = []
+    vm_reported_devices = conn.follow_link(vm.reported_devices)
+    LOG.debug("RP objects: %s", vm_reported_devices)
+    for rp in vm_reported_devices:
+        ips = rp.ips
+        LOG.debug("IP objects: %s", ips)
+        if ips:
+            for ip in ips:
+                address = ip.address
+                LOG.debug("IP address: %s", address)
+                if address:
+                    addresses.append(address)
+
+    return addresses
 
 
 def main():
@@ -110,6 +130,8 @@ def main():
         vms = conn.system_service().vms_service()
         vm = get_vm(vms, vm_id)
         vm_nics = get_vm_nics(conn, vm)
+
+        LOG.info("Checking VM NIC reported devices...")
         vm_primary_addr = get_vm_main_address(vm_nics)
         vm_addresses = get_vm_addresses(vm_nics)
 
@@ -120,6 +142,10 @@ def main():
             LOG.warning("No primary IP found for VM '%s'" % vm_id)
 
         LOG.info("IP addresses for VM '%s': %s" % (vm_id, vm_addresses))
+
+        LOG.info("Fetching IP addresses directly from VM Reported Devices...")
+        vm_addresses = get_ips_from_vm_rps(conn, vm)
+        LOG.info("IP addresses for VM '%s': %s", vm_id, vm_addresses)
 
 
 if __name__ == "__main__":
